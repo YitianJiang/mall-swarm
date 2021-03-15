@@ -16,6 +16,7 @@ services:
   redis:
     image: redis:5
     container_name: redis
+    restart: always
     command: redis-server --appendonly yes
     volumes:
       - /mydata/redis/data:/data #数据文件挂载
@@ -24,6 +25,7 @@ services:
   nginx:
     image: nginx:1.10
     container_name: nginx
+    restart: always   
     volumes:
       - /mydata/nginx/nginx.conf:/etc/nginx/nginx.conf #配置文件挂载
       - /mydata/nginx/html:/usr/share/nginx/html #静态资源根目录挂载
@@ -33,6 +35,7 @@ services:
   rabbitmq:
     image: rabbitmq:3.7.15-management
     container_name: rabbitmq
+    restart: always    
     volumes:
       - /mydata/rabbitmq/data:/var/lib/rabbitmq #数据文件挂载
       - /mydata/rabbitmq/log:/var/log/rabbitmq #日志文件挂载
@@ -42,6 +45,7 @@ services:
   elasticsearch:
     image: elasticsearch:7.6.2
     container_name: elasticsearch
+    restart: always    
     user: root
     environment:
       - "cluster.name=elasticsearch" #设置集群名称为elasticsearch
@@ -56,6 +60,7 @@ services:
   logstash:
     image: logstash:7.6.2
     container_name: logstash
+    restart: always    
     environment:
       - TZ=Asia/Shanghai
     volumes:
@@ -72,6 +77,7 @@ services:
   kibana:
     image: kibana:7.6.2
     container_name: kibana
+    restart: always    
     links:
       - elasticsearch:es #可以用es这个域名访问elasticsearch服务
     depends_on:
@@ -83,6 +89,7 @@ services:
   mongo:
     image: mongo:4.2.5
     container_name: mongo
+    restart: always    
     volumes:
       - /mydata/mongo/db:/data/db #数据文件挂载
     ports:
@@ -90,6 +97,7 @@ services:
   nacos-registry:
     image: nacos/nacos-server:1.3.0
     container_name: nacos-registry
+    restart: always    
     environment:
       - "MODE=standalone"
     ports:
