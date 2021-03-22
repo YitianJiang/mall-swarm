@@ -3,6 +3,7 @@ services:
   mall-admin:
     image: macrodocker/mall-admin:1.0-SNAPSHOT
     container_name: mall-admin
+    restart: always
     ports:
       - 8080:8080
     volumes:
@@ -16,6 +17,7 @@ services:
   mall-search:
     image: macrodocker/mall-search:1.0-SNAPSHOT
     container_name: mall-search
+    restart: always
     ports:
       - 8081:8081
     volumes:
@@ -30,6 +32,7 @@ services:
   mall-portal:
     image: macrodocker/mall-portal:1.0-SNAPSHOT
     container_name: mall-portal
+    restart: always
     ports:
       - 8085:8085
     volumes:
@@ -46,6 +49,7 @@ services:
   mall-auth:
     image: macrodocker/mall-auth:1.0-SNAPSHOT
     container_name: mall-auth
+    restart: always
     ports:
       - 8401:8401
     volumes:
@@ -58,6 +62,7 @@ services:
   mall-gateway:
     image: macrodocker/mall-gateway:1.0-SNAPSHOT
     container_name: mall-gateway
+    restart: always
     ports:
       - 8201:8201
     volumes:
@@ -71,6 +76,7 @@ services:
   mall-monitor:
     image: macrodocker/mall-monitor:1.0-SNAPSHOT
     container_name: mall-monitor
+    restart: always
     ports:
       - 8101:8101
     volumes:
