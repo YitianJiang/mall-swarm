@@ -94,11 +94,21 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
         //认证通过且角色匹配的用户可访问当前路径
         return mono
                 .filter(Authentication::isAuthenticated)
+                //jwt一定是需要鉴权的，".filter(Authentication::isAuthenticated)"一句可以不加
+                //猜测:jwt传进来后,jwt中的authorities字段对应的内容(也就是用户拥有roles)，一个个都被封装成GrantedAuthority的一个实现，比如SimpleGrantedAuthority
+                //(猜测来源: 从SimpleGrantedAuthority看到，getAuthority返回的是“role”,也就是jwt中用户所拥有的角色)
+                //----------------------------------------------------------------------------------------
+                //Authentication::getAuthorities返回：Collection<? extends GrantedAuthority>
+                //猜测"flatMapIterable(Authentication::getAuthorities)"这一句 得到当前用户拥有的"role"列表
+                //只不过这时,这些"role"被包装成了类似SimpleGrantedAuthority这样的东西
                 .flatMapIterable(Authentication::getAuthorities)
+                //".map(GrantedAuthority::getAuthority)"这句对每个SimpleGrantedAuthority进行拆包，获取到里面的"role"
                 .map(GrantedAuthority::getAuthority)
+                //从redis中查询访问当前路径"需要"用户是哪些"role"（这些role记为roles），只要当前用户具备的"role"中存在一项在这个roles里面
                 .any(authorities::contains)
+                //就返回鉴权成功
                 .map(AuthorizationDecision::new)
+                //否则鉴权失败
                 .defaultIfEmpty(new AuthorizationDecision(false));
     }
-
 }
